@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://b8u33kiye0snk"]
+
+[ext_resource type="Script" uid="uid://dvh3m617wnirj" path="res://impact_effect.gd" id="1_rbnxf"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a202f"]
+emission_shape = 1
+emission_sphere_radius = 0.1
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -15, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_05al5"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="ImpactEffect" type="GPUParticles3D" unique_id=1244424577]
+emitting = false
+amount = 15
+lifetime = 1.5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_a202f")
+draw_pass_1 = SubResource("BoxMesh_05al5")
+script = ExtResource("1_rbnxf")

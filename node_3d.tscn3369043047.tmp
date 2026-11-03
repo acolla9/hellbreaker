@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://vccxfhvv65l2"]
+
+[ext_resource type="Script" uid="uid://25mthw1oibq5" path="res://player.gd" id="1_a202f"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_05al5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_27hx1"]
+size = Vector3(0.2, 0.2, 0.8)
+
+[sub_resource type="Environment" id="Environment_05al5"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(0.015686275, 0, 0, 1)
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_76jjq"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_05al5"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_a202f"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[node name="Node3D" type="Node3D" unique_id=2049595912]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1108113923]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9985187, 0)
+script = ExtResource("1_a202f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1065022667]
+shape = SubResource("CapsuleShape3D_05al5")
+
+[node name="Neck" type="Node3D" parent="CharacterBody3D" unique_id=1747983407]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Neck" unique_id=1147430801]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 0)
+
+[node name="WeaponPivot" type="Node3D" parent="CharacterBody3D/Neck/Camera3D" unique_id=424852129]
+
+[node name="Weapon" type="Node3D" parent="CharacterBody3D/Neck/Camera3D/WeaponPivot" unique_id=1272372784]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/Neck/Camera3D/WeaponPivot/Weapon" unique_id=1688329457]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.3, -0.6)
+mesh = SubResource("BoxMesh_27hx1")
+
+[node name="LaserRay" type="RayCast3D" parent="CharacterBody3D/Neck/Camera3D/WeaponPivot/Weapon" unique_id=1380392027]
+target_position = Vector3(0, 0, -50)
+
+[node name="MuzzleFlash" type="OmniLight3D" parent="CharacterBody3D/Neck/Camera3D/WeaponPivot/Weapon" unique_id=2038804052]
+visible = false
+light_color = Color(0.84926724, 0.958821, 0, 1)
+light_energy = 5.0
+shadow_enabled = true
+omni_range = 3.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2062897850]
+environment = SubResource("Environment_05al5")
+camera_attributes = SubResource("CameraAttributesPhysical_76jjq")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=538952536]
+transform = Transform3D(40, 0, 0, 0, 2, 0, 0, 0, 40, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1965595821]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 0, 0, 0)
+mesh = SubResource("BoxMesh_05al5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1124141273]
+shape = SubResource("ConcavePolygonShape3D_a202f")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=602368223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1797194, 0)
+light_energy = 0.5
+shadow_enabled = true

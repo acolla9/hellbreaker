@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://do0tdt6nwm0gl"]
+
+[ext_resource type="Script" uid="uid://pa4hsa4ac04x" path="res://basicenemy.gd" id="1_6njx4"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_05al5"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_05al5"]
+
+[node name="BasicEnemy" type="CharacterBody3D" unique_id=1093855831]
+collision_layer = 4
+script = ExtResource("1_6njx4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1353168020]
+mesh = SubResource("CapsuleMesh_05al5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=325572706]
+shape = SubResource("CapsuleShape3D_05al5")
