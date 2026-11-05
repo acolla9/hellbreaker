@@ -10,11 +10,13 @@ var player = null
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var knockback_velocity = Vector3.ZERO
 
+# Preload your blood effect scene
+const BLOOD_EFFECT_SCENE = preload("res://BloodEffect.tscn")
+
 @onready var mesh = $MeshInstance3D # Zorg dat je mesh zo heet, of pas dit aan naar jouw node naam
 
-func _ready():
-	# Zoek de speler automatisch in de hoofdscene op basis van groep of naam
-	# Tip: Voeg je speler toe aan de groep "player" in Godot (Node tab -> Groups)
+func _ready() -> void:
+	health = max_health
 	await get_tree().process_frame
 	if get_tree().has_group("player"):
 		player = get_tree().get_first_node_in_group("player")
@@ -47,8 +49,10 @@ func _physics_process(delta):
 	move_and_slide()
 
 # Functie die wordt aangeroepen door jouw kogel
-func take_damage(amount, bullet_direction = Vector3.ZERO):
+func take_damage(amount, bullet_direction = Vector3.ZERO, hit_position = global_position):
 	health -= amount
+	
+	spawn_blood(hit_position, 15, 2.0)
 	
 	# Geef de vijand een lichte knockback in de schietrichting
 	knockback_velocity = bullet_direction * 8.0
@@ -82,5 +86,17 @@ func flash_hit():
 			mesh.scale = Vector3.ONE
 
 func die():
+	spawn_blood(global_position + Vector3(0, 1, 0), 80, 5.0)
 	# Speel eventueel een doods-effect of spawn loot/particles
 	queue_free()
+	
+func spawn_blood(pos: Vector3, amount: int, speed: float) -> void:
+	var blood = BLOOD_EFFECT_SCENE.instantiate()
+	get_tree().current_scene.add_child(blood)
+	blood.global_position = pos
+	
+	# Optionally tweak particle amount/speed dynamically if needed
+	blood.amount = amount
+	if blood.process_material is ParticleProcessMaterial:
+		blood.process_material.initial_velocity_min = speed * 0.5
+		blood.process_material.initial_velocity_max = speed

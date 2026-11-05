@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ct5dxm73og226"]
+
+[ext_resource type="Texture2D" uid="uid://b3l13piv0cynb" path="res://icon.svg" id="1_tcvhs"]
+[ext_resource type="Script" uid="uid://cqjicx36cuppx" path="res://blood_decal.gd" id="2_ajono"]
+
+[node name="BloodDecal" type="Decal" unique_id=2074244535]
+size = Vector3(1.5, 1.5, 1.5)
+texture_albedo = ExtResource("1_tcvhs")
+modulate = Color(0.7738555, 2.23808e-06, 9.62615e-07, 1)
+script = ExtResource("2_ajono")

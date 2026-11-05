@@ -29,12 +29,13 @@ const BULLET_SCENE = preload("res://Bullet.tscn")
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var is_sliding = false
 var is_slamming = false
-var waiting_for_slide_release = false # <--- Voorkomt direct doorsliden als je de knop vasthoudt
+var waiting_for_slide_release = false 
 var dash_timer = 0.0
 var dash_direction = Vector3.ZERO
 var mouse_input = Vector2.ZERO
 var bob_time = 0.0
 var fire_cooldown = 0.0
+var air_lockout_timer = 0.0 # <--- Voeg deze toe!
 
 # --- NODE REFERENCES ---
 @onready var neck = $Neck
@@ -63,6 +64,9 @@ func _physics_process(delta):
 	# Check of de speler de slide-knop loslaat na een slam
 	if waiting_for_slide_release and not Input.is_action_pressed("slide"):
 		waiting_for_slide_release = false
+		
+	if air_lockout_timer > 0:
+		air_lockout_timer -= delta
 
 	# Reset slam status bij landing
 	if is_on_floor() and is_slamming:
@@ -131,7 +135,7 @@ func _physics_process(delta):
 			velocity.x = lerp(velocity.x, 0.0, GROUND_FRICTION)
 			velocity.z = lerp(velocity.z, 0.0, GROUND_FRICTION)
 
-	# 7. JUMP & WALL JUMP
+# 7. JUMP & WALL JUMP
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			velocity.y = JUMP_VELOCITY
@@ -141,11 +145,19 @@ func _physics_process(delta):
 				dash_timer = 0.0
 				is_sliding = false
 		
-		elif is_on_wall():
+		elif is_on_wall_only(): # Gebruik is_on_wall_only() zodat je niet in de lucht blijft wall-jumpen
 			var wall_normal = get_wall_normal()
-			velocity.y = WALL_JUMP_VELOCITY
-			velocity.x = wall_normal.x * WALL_JUMP_PUSH
-			velocity.z = wall_normal.z * WALL_JUMP_PUSH
+			
+			# Geef een flinke boost weg van de muur EN naar voren in de richting van je camera/input
+			var push_dir = (wall_normal + -transform.basis.z).normalized()
+			
+			velocity.y = WALL_JUMP_VELOCITY * 1.3 # Maak het hoger
+			velocity.x = push_dir.x * (WALL_JUMP_PUSH * 1.5)
+			velocity.z = push_dir.z * (WALL_JUMP_PUSH * 1.5)
+			
+			# Voorkom dat je direct nog een keer kunt wall-jumpen aan dezelfde muur
+			# Door kort de beweging te dwingen
+			air_lockout_timer = 0.15
 
 	move_and_slide()
 

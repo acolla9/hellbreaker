@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://behgoxw0dgggx"]
+
+[ext_resource type="Material" uid="uid://c6fivhul7mkn5" path="res://new_standard_material_3d.tres" id="1_4dj7e"]
+[ext_resource type="Script" uid="uid://cye1mi4sbgnti" path="res://blood_effect.gd" id="2_ruu1d"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_idcac"]
+lifetime_randomness = 0.1
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 6.0
+initial_velocity_max = 12.0
+gravity = Vector3(0, -24, 0)
+scale_min = 0.19999999
+scale_max = 0.79999995
+color = Color(1, 0.06999999, 0.06999999, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_yjyxf"]
+material = ExtResource("1_4dj7e")
+radius = 0.05
+height = 0.16
+
+[node name="BloodEffect" type="GPUParticles3D" unique_id=439111484]
+emitting = false
+amount = 150
+lifetime = 0.5
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_idcac")
+draw_pass_1 = SubResource("SphereMesh_yjyxf")
+script = ExtResource("2_ruu1d")

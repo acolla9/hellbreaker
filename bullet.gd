@@ -44,7 +44,8 @@ func _on_hit(body):
 		effect.global_position = global_position
 		
 		if body.has_method("take_damage"):
-			body.take_damage(25)
+			# Pass damage amount, the bullet's travel direction for knockback, and the exact global hit position
+			body.take_damage(25, direction, global_position)
 	
 	$MeshInstance3D.visible = false
 	if has_node("CollisionShape3D"):
